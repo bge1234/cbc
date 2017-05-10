@@ -149,7 +149,18 @@ def parse_classes(json_data):
     -----
     For an example of the JSON structure, see file 'pytest_data/classifier_output_1.json'
     """
-    pass
+
+    if len(json_data['images'][0]['classifiers']) > 0:
+        output = set()
+        classes = json_data['images'][0]['classifiers'][0]['classes']
+
+        for i in range(0, len(classes)):
+            output.add(classes[i]['class'])
+
+        return output
+    else:
+        return set()
+
 
 
 
@@ -280,4 +291,11 @@ def measure_accuracy(image_entries):
     - 'actual': a {set} that gives the actual class of that image (only one).
     - 'predicted': a {set} that gives the predicted class(es) of that image.
     """
-    pass
+
+    true_count = 0
+
+    for i in range(0, len(image_entries)):
+        if image_entries[i]['actual'] == image_entries[i]['predicted']:
+            true_count += 1
+
+    return true_count / len(image_entries)
